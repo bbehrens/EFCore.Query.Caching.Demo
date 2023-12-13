@@ -1,4 +1,4 @@
-version: '3.9'
+version: '3.4'
 
 services:
   mysql:
@@ -32,16 +32,12 @@ services:
       - redis_cache:/data
     networks:
       - common_network
-
+  
   efcorequerycachingdemo:
-    container_name: EFCore.Query.Caching.Demo_OpenAPI
-    image: efcorequerycachingdemo:latest
-    restart: on-failure
-    hostname: efcorequerycachingdemo
+    image: ${DOCKER_REGISTRY-}efcorequerycachingdemo
     build:
       context: .
       dockerfile: src/EFCore.Query.Caching.Demo/Dockerfile
-    command: sh -c "/wait && /sayhello"
     networks:
       - common_network
     depends_on:
@@ -49,7 +45,6 @@ services:
         condition: service_healthy
       redis_cache:
         condition: service_healthy
-
 volumes:
     mysql_data:
       driver: local
